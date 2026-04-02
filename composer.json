@@ -1,6 +1,6 @@
 {
     "name": "schmeits/laravel-app-metrics",
-    "description": "Push business metrics from Laravel apps to a central dashboard",
+    "description": "Expose business metrics from Laravel apps via a secure HMAC-signed endpoint",
     "keywords": ["laravel", "metrics", "dashboard", "kpi"],
     "license": "MIT",
     "type": "library",
