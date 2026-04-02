@@ -3,3 +3,11 @@
 .phpunit.result.cache
 .phpunit.cache/
 composer.phar
+composer.lock
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+coverage/
+.php-cs-fixer.cache

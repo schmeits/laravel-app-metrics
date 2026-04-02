@@ -1,9 +1,22 @@
 {
     "name": "schmeits/laravel-app-metrics",
     "description": "Expose business metrics from Laravel apps via a secure HMAC-signed endpoint",
-    "keywords": ["laravel", "metrics", "dashboard", "kpi"],
+    "keywords": ["laravel", "metrics", "dashboard", "kpi", "monitoring", "hmac"],
     "license": "MIT",
     "type": "library",
+    "authors": [
+        {
+            "name": "Tally Schmeits",
+            "email": "tally@schmeits.com",
+            "homepage": "https://github.com/schmeits",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://github.com/schmeits/laravel-app-metrics",
+    "support": {
+        "issues": "https://github.com/schmeits/laravel-app-metrics/issues",
+        "source": "https://github.com/schmeits/laravel-app-metrics"
+    },
     "require": {
         "php": "^8.3",
         "illuminate/support": "^12.0|^13.0",
@@ -13,9 +26,11 @@
         "spatie/laravel-package-tools": "^1.0"
     },
     "require-dev": {
+        "larastan/larastan": "^3.9",
+        "laravel/pint": "^1.14",
         "orchestra/testbench": "^10.0",
         "pestphp/pest": "^3.0|^4.0",
-        "laravel/pint": "^1.14"
+        "phpstan/phpstan": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -36,6 +51,12 @@
                 "AppMetrics": "Schmeits\\AppMetrics\\Facades\\AppMetrics"
             }
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "analyse": "vendor/bin/phpstan analyse",
+        "format": "vendor/bin/pint"
     },
     "config": {
         "sort-packages": true,

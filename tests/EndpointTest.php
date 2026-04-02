@@ -82,3 +82,23 @@ test('endpoint returns empty array when no metrics registered', function () {
     $response->assertOk()
         ->assertJsonCount(0, 'metrics');
 });
+
+test('endpoint rejects request when secret is not configured', function () {
+    config()->set('app-metrics.secret', null);
+
+    $response = $this->getJson('/api/metrics', signedHeaders());
+
+    $response->assertForbidden();
+});
+
+test('endpoint includes app name and timestamp in response', function () {
+    config()->set('app.name', 'Test App');
+
+    AppMetrics::register(fn () => []);
+
+    $response = $this->getJson('/api/metrics', signedHeaders());
+
+    $response->assertOk()
+        ->assertJsonPath('app', 'Test App')
+        ->assertJsonStructure(['app', 'timestamp', 'metrics']);
+});

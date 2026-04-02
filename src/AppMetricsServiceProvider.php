@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Schmeits\AppMetrics;
 
+use Illuminate\Routing\Router;
 use Schmeits\AppMetrics\Http\Controllers\MetricsController;
 use Schmeits\AppMetrics\Http\Middleware\ValidateMetricsSignature;
 use Spatie\LaravelPackageTools\Package;
@@ -31,10 +32,16 @@ class AppMetricsServiceProvider extends PackageServiceProvider
 
     public function bootingPackage(): void
     {
+        /** @var string $url */
         $url = config('app-metrics.url', '/api/metrics');
+
+        /** @var array<int, string> $middleware */
         $middleware = config('app-metrics.middleware', ['api']);
 
-        $this->app['router']
+        /** @var Router $router */
+        $router = $this->app->make(Router::class);
+
+        $router
             ->middleware([...$middleware, ValidateMetricsSignature::class])
             ->get($url, MetricsController::class)
             ->name('app-metrics.endpoint');

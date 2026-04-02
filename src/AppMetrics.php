@@ -39,6 +39,7 @@ class AppMetrics
             return [];
         }
 
+        /** @var array<int, Metric> */
         return ($this->metricsClosure)();
     }
 }

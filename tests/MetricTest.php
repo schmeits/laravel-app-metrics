@@ -8,6 +8,7 @@ declare(strict_types=1);
  * Tests for the Metric DTO: factory methods, serialization, and track flag.
  */
 
+use Schmeits\AppMetrics\AppMetrics;
 use Schmeits\AppMetrics\Data\Metric;
 use Schmeits\AppMetrics\Data\MetricType;
 
@@ -91,4 +92,37 @@ test('metric type enum has correct values', function () {
     expect(MetricType::Currency->value)->toBe('currency');
     expect(MetricType::Percentage->value)->toBe('percentage');
     expect(MetricType::String->value)->toBe('string');
+});
+
+test('currency metric accepts custom suffix', function () {
+    $metric = Metric::currency('revenue', 500.00, 'finance', 'USD');
+
+    expect($metric->suffix)->toBe('USD');
+});
+
+test('app metrics collect returns empty array without registration', function () {
+    $manager = new AppMetrics;
+
+    expect($manager->collect())->toBe([]);
+});
+
+test('app metrics register and collect works', function () {
+    $manager = new AppMetrics;
+
+    $manager->register(fn () => [
+        Metric::numeric('test', 1),
+    ]);
+
+    $metrics = $manager->collect();
+
+    expect($metrics)->toHaveCount(1);
+    expect($metrics[0]->name)->toBe('test');
+});
+
+test('app metrics register returns self for chaining', function () {
+    $manager = new AppMetrics;
+
+    $result = $manager->register(fn () => []);
+
+    expect($result)->toBeInstanceOf(AppMetrics::class);
 });

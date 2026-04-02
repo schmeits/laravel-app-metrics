@@ -22,6 +22,7 @@ class ValidateMetricsSignature
 
     public function handle(Request $request, Closure $next): Response
     {
+        /** @var string|null $secret */
         $secret = config('app-metrics.secret');
 
         if (! $secret) {
@@ -49,6 +50,7 @@ class ValidateMetricsSignature
             abort(403, 'Invalid signature.');
         }
 
+        /** @var Response */
         return $next($request);
     }
 }
