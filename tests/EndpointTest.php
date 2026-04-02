@@ -42,7 +42,7 @@ test('endpoint returns metrics with valid signature', function () {
             'app',
             'timestamp',
             'metrics' => [
-                '*' => ['name', 'value', 'type', 'group', 'suffix', 'tracked'],
+                '*' => ['name', 'value', 'type', 'group', 'suffix', 'tracked', 'tenant'],
             ],
         ]);
 });

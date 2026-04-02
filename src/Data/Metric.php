@@ -20,6 +20,7 @@ class Metric
         public readonly ?string $group = null,
         public readonly ?string $suffix = null,
         public bool $tracked = false,
+        public ?string $tenant = null,
     ) {}
 
     /**
@@ -65,9 +66,19 @@ class Metric
     }
 
     /**
+     * Set the tenant this metric belongs to (for multi-tenant apps).
+     */
+    public function tenant(string $tenant): self
+    {
+        $this->tenant = $tenant;
+
+        return $this;
+    }
+
+    /**
      * Serialize to array for JSON response.
      *
-     * @return array{name: string, value: mixed, type: string, group: ?string, suffix: ?string, tracked: bool}
+     * @return array{name: string, value: mixed, type: string, group: ?string, suffix: ?string, tracked: bool, tenant: ?string}
      */
     public function toArray(): array
     {
@@ -78,6 +89,7 @@ class Metric
             'group' => $this->group,
             'suffix' => $this->suffix,
             'tracked' => $this->tracked,
+            'tenant' => $this->tenant,
         ];
     }
 }

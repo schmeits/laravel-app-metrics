@@ -21,6 +21,7 @@ test('numeric metric serializes correctly', function () {
         'group' => 'users',
         'suffix' => null,
         'tracked' => false,
+        'tenant' => null,
     ]);
 });
 
@@ -63,6 +64,26 @@ test('metrics are not tracked by default', function () {
 
     expect($metric->tracked)->toBeFalse();
     expect($metric->group)->toBeNull();
+});
+
+test('tenant method sets tenant name', function () {
+    $metric = Metric::numeric('tickets', 42, 'sales')->tenant('Alfa Bier');
+
+    expect($metric->tenant)->toBe('Alfa Bier');
+    expect($metric->toArray()['tenant'])->toBe('Alfa Bier');
+});
+
+test('tenant is null by default', function () {
+    $metric = Metric::numeric('count', 5);
+
+    expect($metric->tenant)->toBeNull();
+});
+
+test('track and tenant can be chained', function () {
+    $metric = Metric::numeric('tickets', 40, 'sales')->tenant('Brouwerij')->track();
+
+    expect($metric->tenant)->toBe('Brouwerij');
+    expect($metric->tracked)->toBeTrue();
 });
 
 test('metric type enum has correct values', function () {
