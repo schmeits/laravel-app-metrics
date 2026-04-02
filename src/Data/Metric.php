@@ -13,6 +13,9 @@ namespace Schmeits\AppMetrics\Data;
 
 class Metric
 {
+    /**
+     * @param  array<string, mixed>  $meta
+     */
     public function __construct(
         public readonly string $name,
         public readonly mixed $value,
@@ -21,6 +24,7 @@ class Metric
         public readonly ?string $suffix = null,
         public bool $tracked = false,
         public ?string $tenant = null,
+        public array $meta = [],
     ) {}
 
     /**
@@ -76,13 +80,25 @@ class Metric
     }
 
     /**
+     * Attach arbitrary display metadata (label, description, color, etc.).
+     *
+     * @param  array<string, mixed>  $meta
+     */
+    public function meta(array $meta): self
+    {
+        $this->meta = array_merge($this->meta, $meta);
+
+        return $this;
+    }
+
+    /**
      * Serialize to array for JSON response.
      *
-     * @return array{name: string, value: mixed, type: string, group: ?string, suffix: ?string, tracked: bool, tenant: ?string}
+     * @return array{name: string, value: mixed, type: string, group: ?string, suffix: ?string, tracked: bool, tenant: ?string, meta?: array<string, mixed>}
      */
     public function toArray(): array
     {
-        return [
+        $data = [
             'name' => $this->name,
             'value' => $this->value,
             'type' => $this->type->value,
@@ -91,5 +107,11 @@ class Metric
             'tracked' => $this->tracked,
             'tenant' => $this->tenant,
         ];
+
+        if ($this->meta !== []) {
+            $data['meta'] = $this->meta;
+        }
+
+        return $data;
     }
 }

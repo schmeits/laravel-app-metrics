@@ -100,6 +100,45 @@ test('currency metric accepts custom suffix', function () {
     expect($metric->suffix)->toBe('USD');
 });
 
+test('meta method attaches arbitrary metadata', function () {
+    $metric = Metric::numeric('scanned_today', 100, 'sales')
+        ->meta(['label' => '100 gescand', 'description' => '+20 ten opzichte van gisteren']);
+
+    expect($metric->meta)->toBe([
+        'label' => '100 gescand',
+        'description' => '+20 ten opzichte van gisteren',
+    ]);
+    expect($metric->toArray()['meta'])->toBe([
+        'label' => '100 gescand',
+        'description' => '+20 ten opzichte van gisteren',
+    ]);
+});
+
+test('meta is excluded from toArray when empty', function () {
+    $metric = Metric::numeric('count', 5);
+
+    expect($metric->toArray())->not->toHaveKey('meta');
+});
+
+test('meta can be chained with tenant and track', function () {
+    $metric = Metric::numeric('tickets', 42, 'sales')
+        ->tenant('Brouwerij')
+        ->meta(['label' => '42 tickets', 'color' => '#22c55e'])
+        ->track();
+
+    expect($metric->tenant)->toBe('Brouwerij');
+    expect($metric->tracked)->toBeTrue();
+    expect($metric->meta)->toBe(['label' => '42 tickets', 'color' => '#22c55e']);
+});
+
+test('meta can be called multiple times and merges', function () {
+    $metric = Metric::numeric('test', 1)
+        ->meta(['label' => 'Test'])
+        ->meta(['color' => 'red']);
+
+    expect($metric->meta)->toBe(['label' => 'Test', 'color' => 'red']);
+});
+
 test('app metrics collect returns empty array without registration', function () {
     $manager = new AppMetrics;
 

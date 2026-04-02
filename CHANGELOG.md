@@ -4,6 +4,13 @@ All notable changes to `laravel-app-metrics` will be documented in this file.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-04-02
+
+### Added
+- `meta()` method on Metric DTO for attaching arbitrary display metadata (label, description, color, etc.)
+- Meta is excluded from JSON output when empty, keeping the payload clean
+- Multiple `meta()` calls merge data, allowing progressive enrichment
+
 ## [1.0.0] - 2026-04-02
 
 ### Added

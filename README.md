@@ -111,6 +111,35 @@ Metric::currency('revenue', 15000.00, 'finance')
     ->track();
 ```
 
+### Metadata
+
+Attach arbitrary display metadata (label, description, color, etc.) to any metric using the `meta()` method:
+
+```php
+Metric::numeric('scanned_today', 100, 'sales')
+    ->meta(['label' => '100 gescand', 'description' => '+20 ten opzichte van gisteren']);
+```
+
+Multiple `meta()` calls merge the data, allowing progressive enrichment:
+
+```php
+Metric::numeric('tickets', 42, 'support')
+    ->meta(['label' => '42 tickets'])
+    ->meta(['color' => '#22c55e']);
+// Result: ['label' => '42 tickets', 'color' => '#22c55e']
+```
+
+Meta is only included in the JSON output when non-empty, keeping payloads clean.
+
+All methods can be chained freely:
+
+```php
+Metric::numeric('tickets', 42, 'sales')
+    ->tenant('Brouwerij')
+    ->meta(['label' => '42 tickets', 'color' => '#22c55e'])
+    ->track();
+```
+
 ### Response format
 
 The endpoint returns JSON:
@@ -128,10 +157,25 @@ The endpoint returns JSON:
             "suffix": null,
             "tracked": false,
             "tenant": null
+        },
+        {
+            "name": "scanned_today",
+            "value": 100,
+            "type": "numeric",
+            "group": "sales",
+            "suffix": null,
+            "tracked": false,
+            "tenant": null,
+            "meta": {
+                "label": "100 gescand",
+                "description": "+20 ten opzichte van gisteren"
+            }
         }
     ]
 }
 ```
+
+> **Note:** The `meta` key is only present when metadata has been attached to the metric.
 
 ## Authentication
 
