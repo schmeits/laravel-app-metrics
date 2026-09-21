@@ -102,15 +102,15 @@ test('currency metric accepts custom suffix', function () {
 
 test('meta method attaches arbitrary metadata', function () {
     $metric = Metric::numeric('scanned_today', 100, 'sales')
-        ->meta(['label' => '100 gescand', 'description' => '+20 ten opzichte van gisteren']);
+        ->meta(['label' => '100 scanned', 'description' => '+20 compared to yesterday']);
 
     expect($metric->meta)->toBe([
-        'label' => '100 gescand',
-        'description' => '+20 ten opzichte van gisteren',
+        'label' => '100 scanned',
+        'description' => '+20 compared to yesterday',
     ]);
     expect($metric->toArray()['meta'])->toBe([
-        'label' => '100 gescand',
-        'description' => '+20 ten opzichte van gisteren',
+        'label' => '100 scanned',
+        'description' => '+20 compared to yesterday',
     ]);
 });
 
