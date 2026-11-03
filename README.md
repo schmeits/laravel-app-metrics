@@ -225,6 +225,10 @@ composer test
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
+## Need help with Laravel?
+
+I'm Tally Schmeits, the maintainer of this package. I build and maintain Laravel applications for clients: new business applications, upgrades, performance work and taking over existing apps. More at [schmeits.com/laravel-specialist](https://schmeits.com/laravel-specialist).
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
