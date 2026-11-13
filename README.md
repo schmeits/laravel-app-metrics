@@ -140,6 +140,40 @@ Metric::numeric('tickets', 42, 'sales')
     ->track();
 ```
 
+### Events (timeline)
+
+Besides the current numbers, an app can report what happened, so the dashboard can show a timeline ("2 tickets sold for Het huis van Bosch"). Events are read from your own tables when the dashboard asks; the package stores nothing.
+
+```php
+use Carbon\CarbonImmutable;
+use Schmeits\AppMetrics\Data\Event;
+use Schmeits\AppMetrics\Facades\AppMetrics;
+
+AppMetrics::events(fn (CarbonImmutable $since) => Order::query()
+    ->where('paid_at', '>=', $since)
+    ->get()
+    ->map(fn (Order $order) => Event::make("order:{$order->id}", $order->paid_at, "{$order->quantity} tickets sold")
+        ->type('sale')
+        ->tenant($order->tenant->name)
+        ->meta(['amount' => $order->quantity]))
+    ->all());
+```
+
+The id must be stable and unique within the app, so the dashboard stores each event once. Keep the text free of personal data.
+
+The events are served at `{url}/events` (default `/api/metrics/events`) with the same signature headers. Query parameters: `since` (ISO 8601, default 24 hours ago, at most 7 days back) and `limit` (default 200, max 500). The response lists the events newest first:
+
+```json
+{
+    "app": "Tickies",
+    "timestamp": "2026-11-13T12:00:00+00:00",
+    "since": "2026-11-12T12:00:00+00:00",
+    "events": [
+        {"id": "order:2", "at": "2026-11-13T11:00:00+00:00", "text": "1 ticket sold", "type": "sale", "tenant": "Het huis van Bosch", "meta": {"amount": 1}}
+    ]
+}
+```
+
 ### Response format
 
 The endpoint returns JSON:

@@ -5,12 +5,14 @@ declare(strict_types=1);
 /**
  * src/AppMetricsServiceProvider.php
  *
- * Registers the AppMetrics package: config, route, and facade binding.
+ * Registers the AppMetrics package: config, routes (metrics and events), and
+ * facade binding.
  */
 
 namespace Schmeits\AppMetrics;
 
 use Illuminate\Routing\Router;
+use Schmeits\AppMetrics\Http\Controllers\EventsController;
 use Schmeits\AppMetrics\Http\Controllers\MetricsController;
 use Schmeits\AppMetrics\Http\Middleware\ValidateMetricsSignature;
 use Spatie\LaravelPackageTools\Package;
@@ -52,5 +54,10 @@ class AppMetricsServiceProvider extends PackageServiceProvider
             ->middleware([...$middleware, ValidateMetricsSignature::class])
             ->get($url, MetricsController::class)
             ->name('app-metrics.endpoint');
+
+        $router
+            ->middleware([...$middleware, ValidateMetricsSignature::class])
+            ->get(rtrim($url, '/').'/events', EventsController::class)
+            ->name('app-metrics.events');
     }
 }

@@ -4,6 +4,12 @@ All notable changes to `laravel-app-metrics` will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-13
+
+### Added
+- Events for a timeline: `AppMetrics::events(fn (CarbonImmutable $since) => [...])` with the `Event` DTO (`make()`, `type()`, `tenant()`, `meta()`)
+- Signed endpoint `{url}/events` with `since` (default 24 hours, at most 7 days back) and `limit` (default 200, max 500), newest first
+
 ## [1.1.0] - 2026-04-02
 
 ### Added

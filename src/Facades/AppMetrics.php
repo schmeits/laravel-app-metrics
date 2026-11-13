@@ -16,6 +16,8 @@ use Schmeits\AppMetrics\AppMetrics as AppMetricsManager;
 /**
  * @method static \Schmeits\AppMetrics\AppMetrics register(\Closure $closure)
  * @method static array<int, \Schmeits\AppMetrics\Data\Metric> collect()
+ * @method static \Schmeits\AppMetrics\AppMetrics events(\Closure $closure)
+ * @method static array<int, \Schmeits\AppMetrics\Data\Event> collectEvents(\Carbon\CarbonImmutable $since)
  *
  * @see AppMetricsManager
  */
