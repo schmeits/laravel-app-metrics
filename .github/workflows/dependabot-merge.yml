@@ -1,0 +1,34 @@
+# .github/workflows/dependabot-merge.yml
+#
+# Merget een Dependabot-PR vanzelf zodra run-tests daarop helemaal groen is
+# (tests op Laravel 12 en 13, PHPStan en composer audit). Rood blijft liggen
+# voor Tally. Draait na run-tests in plaats van GitHub auto-merge, omdat main
+# geen verplichte checks heeft en auto-merge dan meteen zou mergen.
+
+name: dependabot-merge
+
+on:
+  workflow_run:
+    workflows: [run-tests]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.actor.login == 'dependabot[bot]' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      startsWith(github.event.workflow_run.head_branch, 'dependabot/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: gh pr merge "$BRANCH" --repo "$GITHUB_REPOSITORY" --squash --delete-branch --match-head-commit "$SHA"
