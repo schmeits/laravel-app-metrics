@@ -73,3 +73,15 @@ test('without registered events the endpoint returns an empty list', function ()
         ->assertOk()
         ->assertJsonPath('events', []);
 });
+
+test('an unreadable since falls back to the last 24 hours', function () {
+    AppMetrics::events(fn (CarbonImmutable $since) => [
+        Event::make('recent', CarbonImmutable::parse('2026-11-13 10:00'), 'within a day'),
+        Event::make('old', CarbonImmutable::parse('2026-11-11 10:00'), 'two days old'),
+    ]);
+
+    $this->getJson('/api/metrics/events?since=not-a-date', signedHeaders())
+        ->assertOk()
+        ->assertJsonCount(1, 'events')
+        ->assertJsonPath('events.0.id', 'recent');
+});

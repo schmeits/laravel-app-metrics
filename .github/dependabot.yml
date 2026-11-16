@@ -4,7 +4,15 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
+  # Eén gebundelde PR per week in plaats van losse PR's die blijven liggen;
+  # run-tests.yml test hem op Laravel 12 en 13.
   - package-ecosystem: composer
     directory: /
     schedule:
       interval: weekly
+    groups:
+      composer:
+        patterns: ['*']

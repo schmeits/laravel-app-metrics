@@ -4,6 +4,13 @@ All notable changes to `laravel-app-metrics` will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- 2026-11-16 13:11: alle dev-dependencies bijgewerkt; de testomgeving draait nu op Laravel 13 (orchestra/testbench ^10.0|^11.0). composer audit schoon, ook de 8 meldingen die nog openstonden.
+- 2026-11-16 13:11: GitHub Actions (run-tests.yml): tests op PHP 8.3 en 8.4 met Laravel 12 en 13, plus PHPStan en composer audit; bij elke push en PR en elke maandag. Dependabot bundelt updates nu in een PR per week.
+
+### Added
+- 2026-11-16 13:11: test voor een onleesbare `since` op het events-endpoint (dekking nu 100%).
+
 ### Security
 - 2026-11-16 13:05: dev-dependency symfony/yaml 7.4.14 naar 7.4.23 (CVE-2026-109413, onbegrensde recursie in de YAML-parser); alleen composer.lock, het package parset zelf geen YAML
 
