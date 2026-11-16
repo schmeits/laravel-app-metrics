@@ -4,6 +4,9 @@ All notable changes to `laravel-app-metrics` will be documented in this file.
 
 ## [Unreleased]
 
+### Security
+- 2026-11-16 13:05: dev-dependency symfony/yaml 7.4.14 naar 7.4.23 (CVE-2026-109413, onbegrensde recursie in de YAML-parser); alleen composer.lock, het package parset zelf geen YAML
+
 ## [1.2.0] - 2026-11-13
 
 ### Added
